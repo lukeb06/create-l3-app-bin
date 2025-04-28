@@ -1,10 +1,8 @@
 #!/usr/bin/env node
 
 const readline = require("readline");
-const { spawn, exec } = require("child_process");
+const { spawn, exec, execSync } = require("child_process");
 const fs = require("fs");
-
-import { execSync } from "node:child_process";
 
 function hasYarn() {
   try {
