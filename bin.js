@@ -17,7 +17,7 @@ const useYarn = hasYarn();
 const PM = useYarn ? "yarn" : "npm";
 
 const usePM = (command) => {
-  return "${PM} ${command}";
+  return `${PM} ${command}`;
 };
 
 const rl = readline.createInterface({

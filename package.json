@@ -1,6 +1,6 @@
 {
   "name": "create-l3-app",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "bin": {
     "create-l3-app": "bin.js"
   }
