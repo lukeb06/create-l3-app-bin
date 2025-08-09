@@ -4,17 +4,17 @@ const readline = require("readline");
 const { spawn, exec, execSync } = require("child_process");
 const fs = require("fs");
 
-function hasYarn() {
+function hasPnpm() {
   try {
-    execSync("yarn --version", { stdio: "ignore" });
+    execSync("pnpm --version", { stdio: "ignore" });
     return true;
   } catch {
     return false;
   }
 }
 
-const useYarn = hasYarn();
-const PM = useYarn ? "yarn" : "npm";
+const usePnpm = hasPnpm();
+const PM = usePnpm ? "pnpm" : "npm";
 
 const usePM = (command) => {
   return `${PM} ${command}`;
