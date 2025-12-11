@@ -123,8 +123,18 @@ function cloneFile(file, newName) {
   });
 }
 
-async function rewritePackageJSON() {
-  await replaceInFile("package.json", "create-l3-app", PROJECT_NAME);
+async function rewriteTitles() {
+  const files = [
+    "package.json",
+    "src/app/login/page.tsx",
+    "src/app/register/page.tsx",
+    "src/app/(main)/client.tsx",
+    "src/app/layout.tsx",
+  ];
+
+  for (const file of files) {
+    await replaceInFile(file, "create-l3-app", PROJECT_NAME);
+  }
 }
 
 async function rewritePort() {
@@ -154,7 +164,7 @@ async function main() {
   console.log("Installing dependencies...");
   await installDeps();
 
-  await rewritePackageJSON();
+  await rewriteTitles();
   await rewritePort();
   await createREADME();
 
