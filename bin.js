@@ -124,13 +124,7 @@ function cloneFile(file, newName) {
 }
 
 async function rewriteTitles() {
-  const files = [
-    "package.json",
-    "src/app/login/page.tsx",
-    "src/app/register/page.tsx",
-    "src/app/(main)/client.tsx",
-    "src/app/layout.tsx",
-  ];
+  const files = ["package.json", "src/data/static.ts"];
 
   for (const file of files) {
     await replaceInFile(file, "create-l3-app", PROJECT_NAME);
