@@ -4,6 +4,8 @@ const readline = require("readline");
 const { spawn, exec, execSync } = require("child_process");
 const fs = require("fs");
 
+const crypto = require("crypto");
+
 function hasPnpm() {
   try {
     execSync("pnpm --version", { stdio: "ignore" });
@@ -134,6 +136,11 @@ async function rewriteTitles() {
 async function rewritePort() {
   await cloneFile(".env.example", ".env");
   await replaceInFile(".env", "PORT=8080", `PORT=${WEB_PORT}`);
+  await replaceInFile(
+    ".env",
+    'SECRET="your-secret-key"',
+    `SECRET="${crypto.randomUUID()}"`,
+  );
 }
 
 async function createREADME() {
