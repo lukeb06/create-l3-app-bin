@@ -143,7 +143,12 @@ function removeFile(file) {
   });
 }
 
-function removeDir(dir) {
+async function removeDir(dir) {
+  const content = fs.readdirSync(`./${PROJECT_NAME}/${dir}`);
+  for (const file of content) {
+    await removeFile(`${dir}/${file}`);
+  }
+
   return new Promise((resolve, reject) => {
     fs.rmdir(`./${PROJECT_NAME}/${dir}`, (err) => {
       if (err) return reject(err);
