@@ -43,6 +43,15 @@ function getWebPort() {
   });
 }
 
+function getNoAuth() {
+  return new Promise((resolve) => {
+    rl.question("Remove auth? (y/N): ", (answer) => {
+      if (answer.toLowerCase() === "y") resolve(true);
+      else resolve(false);
+    });
+  });
+}
+
 let PROJECT_NAME = "my-app";
 let WEB_PORT = 8080;
 
@@ -125,6 +134,24 @@ function cloneFile(file, newName) {
   });
 }
 
+function removeFile(file) {
+  return new Promise((resolve, reject) => {
+    fs.unlink(`./${PROJECT_NAME}/${file}`, (err) => {
+      if (err) return reject(err);
+      resolve();
+    });
+  });
+}
+
+function removeDir(dir) {
+  return new Promise((resolve, reject) => {
+    fs.rmdir(`./${PROJECT_NAME}/${dir}`, (err) => {
+      if (err) return reject(err);
+      resolve();
+    });
+  });
+}
+
 async function rewriteTitles() {
   const files = ["package.json", "src/data/static.ts"];
 
@@ -150,9 +177,57 @@ async function createREADME() {
   );
 }
 
+async function removeAuth() {
+  await removeDir("src/app/login");
+  await removeDir("src/app/register");
+  await removeDir("src/app/(main)/profile");
+  await replaceInFile(
+    "src/components/nav/mobile.tsx",
+    "{ id: 2, href: '/profile', icon: <UserIcon size={32} /> },",
+    "",
+  );
+  await replaceInFile(
+    "src/components/nav/classic/index.tsx",
+    "import { getAuth } from '@/lib/get-auth';",
+    "",
+  );
+  await replaceInFile(
+    "src/components/nav/classic/index.tsx",
+    "const { user } = await getAuth();",
+    "",
+  );
+  await replaceInFile(
+    "src/components/nav/classic/index.tsx",
+    "user={user} ",
+    "",
+  );
+
+  await replaceInFile(
+    "src/components/nav/classic/client.tsx",
+    "import type { PublicUser } from '@/lib/actions';",
+    "",
+  );
+  await replaceInFile(
+    "src/components/nav/classic/client.tsx",
+    "import AuthButton from './auth-button';",
+    "",
+  );
+  await replaceInFile(
+    "src/components/nav/classic/client.tsx",
+    "{ user }: { user: PublicUser | null }",
+    "",
+  );
+  await replaceInFile(
+    "src/components/nav/classic/client.tsx",
+    "<AuthButton user={user} />",
+    "",
+  );
+}
+
 async function main() {
   const projectName = await getProjectName();
   const webPort = await getWebPort();
+  const noAuth = await getNoAuth();
 
   PROJECT_NAME = projectName;
   WEB_PORT = webPort;
@@ -168,6 +243,10 @@ async function main() {
   await rewriteTitles();
   await rewritePort();
   await createREADME();
+
+  if (noAuth) {
+    await removeAuth();
+  }
 
   await initialCommit();
 
